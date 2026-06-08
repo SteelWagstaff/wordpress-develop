@@ -206,7 +206,7 @@ CAP;
 			)
 		);
 		$this->assertSame( 1, substr_count( $result, 'wp-caption &amp;myAlignment' ) );
-		$this->assertSame( 1, preg_match( '/id="myId[0-9]+"/', $result ) );
+		$this->assertSame( 1, substr_count( $result, 'id="myId"' ) );
 		$this->assertSame( 1, substr_count( $result, self::CAPTION ) );
 	}
 
@@ -302,7 +302,10 @@ CAP;
 			self::IMG_CONTENT . self::HTML_CONTENT
 		);
 
-		$this->assertSame( 1, preg_match( '/aria-describedby="caption-myId[0-9]+"/', $result ) );
+		$caption_id = $this->get_id_of_first_tag_with_class( $result, 'wp-caption-text' );
+
+		$this->assertNotEmpty( $caption_id, 'Caption should have an ID.' );
+		$this->assertSame( 1, substr_count( $result, 'aria-describedby="' . $caption_id . '"' ) );
 	}
 
 	/**
